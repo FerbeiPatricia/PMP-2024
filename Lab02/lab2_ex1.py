@@ -20,7 +20,7 @@ def select_random_elements_from_csv(file_path, num_elements):
 
 
 # Exemplu de utilizare
-file_path = 'lista.csv'  # Înlocuiește cu calea reală a fișierului tău
+file_path = 'lista.csv'  
 num_elements = 2  # Numărul de elemente pe care vrem să le selectăm
 
 selected_elements = select_random_elements_from_csv(file_path, num_elements)
