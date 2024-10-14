@@ -1,27 +1,43 @@
-import csv
 import random
 
 
-def select_random_elements_from_csv(file_path, num_elements):
-    # Citim conținutul fișierului CSV
-    with open(file_path, newline='') as csvfile:
-        reader = csv.reader(csvfile)
-        data_list = [row[0] for row in reader]  # Presupunem că fiecare rând are un singur element
+def simuleaza_experiment():
+    # Bile inițiale în urnă
+    urn = {'rosie': 3, 'albastra': 4, 'neagra': 2}
 
-    # Verificăm dacă numărul de elemente cerut este mai mic sau egal cu dimensiunea listei
-    if num_elements > len(data_list):
-        raise ValueError("Numărul de elemente cerut este mai mare decât dimensiunea listei din fișier.")
+    # Aruncăm zarul
+    zar = random.randint(1, 6)
 
-    # Selectăm un număr de elemente fără repetiție
-    selected_elements = random.sample(data_list, num_elements)
+    # Actualizăm urna în funcție de rezultatul zarului
+    if zar in [2, 3, 5]:  # Număr prim
+        urn['neagra'] += 1
+    elif zar == 6:  # Numărul 6
+        urn['rosie'] += 1
+    else:  # Numărul 1 sau 4
+        urn['albastra'] += 1
 
-    # Returnăm elementele selectate
-    return selected_elements
+    # Creăm lista totală de bile pentru a simula extragerea
+    bile = ['rosie'] * urn['rosie'] + ['albastra'] * urn['albastra'] + ['neagra'] * urn['neagra']
+
+    # Extragerea unei bile
+    extrasa = random.choice(bile)
+
+    return extrasa
 
 
-# Exemplu de utilizare
-file_path = 'lista.csv'  
-num_elements = 2  # Numărul de elemente pe care vrem să le selectăm
+# Simulăm de multe ori pentru a estima probabilitatea
+def estimeaza_probabilitatea_rosie(n_experimente):
+    numar_rosii = 0
 
-selected_elements = select_random_elements_from_csv(file_path, num_elements)
-print("Elementele selectate sunt:", selected_elements)
+    for _ in range(n_experimente):
+        if simuleaza_experiment() == 'rosie':
+            numar_rosii += 1
+
+    # Probabilitatea estimată
+    return numar_rosii / n_experimente
+
+
+# Simulăm de 10000 de ori
+n_experimente = 10000
+probabilitate_rosie = estimeaza_probabilitatea_rosie(n_experimente)
+print(f"Probabilitatea estimată de a extrage o bilă roșie: {probabilitate_rosie:.4f}")
